@@ -1,20 +1,10 @@
 # _*_  coding:utf-8 _*_
 
-
-
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
-# os.sys.path.append('/Users/apple/anaconda3/envs/python3.6/lib/python2.7/site-packages')
 from scapy.all import *
-import logging
-logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 
-'''
-
+"""
 主机的操作系统扫描，基于tcp协议栈的扫描
-
-'''
+"""
 # import re
 # from scapy.data import KnowledgeBase
 # from scapy.config import conf
@@ -28,7 +18,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 #
 # finger_ip_os = []
 #
-# conf.nmap_os_base = "/usr/local/share/nmap/nmap-os-db"
+# conf.nmap_os_base = '/usr/local/share/nmap/nmap-os-db'
 #
 # # macos /usr/local/share/nmap/nmap-os-db
 #
@@ -37,18 +27,18 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 #
 #
 # class NmapKnowledgeBase(KnowledgeBase):
-#     """A KnowledgeBase specialized in Nmap first-generation OS
+#     '''A KnowledgeBase specialized in Nmap first-generation OS
 # fingerprints database. Loads from conf.nmap_os_base when self.filename is
 # None.
 #
-#     """
+#     '''
 #     def lazy_init(self):
 #         try:
 #             fdesc = open(conf.nmap_os_base
 #                          if self.filename is None else
-#                          self.filename, "rb")
+#                          self.filename, 'rb')
 #         except (IOError, TypeError):
-#             warning("Cannot open nmap database [%s]", self.filename)
+#             warning('Cannot open nmap database [%s]', self.filename)
 #             self.filename = None
 #             return
 #
@@ -60,13 +50,13 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 #             line = line.split('#', 1)[0].strip()
 #             if not line:
 #                 continue
-#             if line.startswith("Fingerprint "):
+#             if line.startswith('Fingerprint'):
 #                 if name is not None:
 #                     self.base.append((name, sig))
 #                 name = line[12:].strip()
 #                 sig = {}
 #                 continue
-#             if line.startswith("Class "):
+#             if line.startswith('Class '):
 #                 continue
 #             line = _NMAP_LINE.search(line)
 #             if line is None:
@@ -85,44 +75,44 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 # def nmap_tcppacket_sig(pkt):
 #     res = {}
 #     if pkt is not None:
-#         res["DF"] = "Y" if pkt.flags.DF else "N"
-#         res["W"] = "%X" % pkt.window
-#         res["ACK"] = "S++" if pkt.ack == 2 else "S" if pkt.ack == 1 else "O"
-#         res["Flags"] = str(pkt[TCP].flags)[::-1]
-#         res["Ops"] = "".join(x[0][0] for x in pkt[TCP].options)
+#         res['DF'] = 'Y' if pkt.flags.DF else 'N'
+#         res['W'] = '%X' % pkt.window
+#         res['ACK'] = 'S++' if pkt.ack == 2 else 'S' if pkt.ack == 1 else 'O'
+#         res['Flags'] = str(pkt[TCP].flags)[::-1]
+#         res['Ops'] = ''.join(x[0][0] for x in pkt[TCP].options)
 #     else:
-#         res["Resp"] = "N"
+#         res['Resp'] = 'N'
 #     return res
 #
 #
 # def nmap_udppacket_sig(snd, rcv):
 #     res = {}
 #     if rcv is None:
-#         res["Resp"] = "N"
+#         res['Resp'] = 'N'
 #     else:
-#         res["DF"] = "Y" if rcv.flags.DF else "N"
-#         res["TOS"] = "%X" % rcv.tos
-#         res["IPLEN"] = "%X" % rcv.len
-#         res["RIPTL"] = "%X" % rcv.payload.payload.len
-#         res["RID"] = "E" if snd.id == rcv[IPerror].id else "F"
-#         res["RIPCK"] = "E" if snd.chksum == rcv[IPerror].chksum else (
-#             "0" if rcv[IPerror].chksum == 0 else "F"
+#         res['DF'] = 'Y' if rcv.flags.DF else 'N'
+#         res['TOS'] = '%X' % rcv.tos
+#         res['IPLEN'] = '%X' % rcv.len
+#         res['RIPTL'] = '%X' % rcv.payload.payload.len
+#         res['RID'] = 'E' if snd.id == rcv[IPerror].id else 'F'
+#         res['RIPCK'] = 'E' if snd.chksum == rcv[IPerror].chksum else (
+#             '0' if rcv[IPerror].chksum == 0 else 'F'
 #         )
-#         res["UCK"] = "E" if snd.payload.chksum == rcv[UDPerror].chksum else (
-#             "0" if rcv[UDPerror].chksum == 0 else "F"
+#         res['UCK'] = 'E' if snd.payload.chksum == rcv[UDPerror].chksum else (
+#             '0' if rcv[UDPerror].chksum == 0 else 'F'
 #         )
-#         res["ULEN"] = "%X" % rcv[UDPerror].len
-#         res["DAT"] = "E" if (
+#         res['ULEN'] = '%X' % rcv[UDPerror].len
+#         res['DAT'] = 'E' if (
 #             isinstance(rcv[UDPerror].payload, NoPayload) or
 #             raw(rcv[UDPerror].payload) == raw(snd[UDP].payload)
-#         ) else "F"
+#         ) else 'F'
 #     return res
 #
 #
 # def nmap_match_one_sig(seen, ref):
-#     cnt = sum(val in ref.get(key, "").split("|")
+#     cnt = sum(val in ref.get(key, '').split('|')
 #               for key, val in six.iteritems(seen))
-#     if cnt == 0 and seen.get("Resp") == "N":
+#     if cnt == 0 and seen.get('Resp') == 'N':
 #         return 0.7
 #     return float(cnt) / len(seen)
 #
@@ -130,28 +120,28 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 # def nmap_sig(target, oport=80, cport=81, ucport=1):
 #     res = {}
 #
-#     tcpopt = [("WScale", 10),
-#               ("NOP", None),
-#               ("MSS", 256),
-#               ("Timestamp", (123, 0))]
+#     tcpopt = [('WScale', 10),
+#               ('NOP', None),
+#               ('MSS', 256),
+#               ('Timestamp', (123, 0))]
 #     tests = [
 #         IP(dst=target, id=1) /
 #         TCP(seq=1, sport=5001 + i, dport=oport if i < 4 else cport,
 #             options=tcpopt, flags=flags)
-#         for i, flags in enumerate(["CS", "", "SFUP", "A", "S", "A", "FPU"])
+#         for i, flags in enumerate(['CS', '', 'SFUP', 'A', 'S', 'A', 'FPU'])
 #     ]
-#     tests.append(IP(dst=target)/UDP(sport=5008, dport=ucport)/(300 * "i"))
+#     tests.append(IP(dst=target)/UDP(sport=5008, dport=ucport)/(300 * 'i'))
 #
 #     ans, unans = sr(tests, timeout=2)
 #     ans.extend((x, None) for x in unans)
 #
 #     for snd, rcv in ans:
 #         if snd.sport == 5008:
-#             res["PU"] = (snd, rcv)
+#             res['PU'] = (snd, rcv)
 #         else:
-#             test = "T%i" % (snd.sport - 5000)
+#             test = 'T%i' % (snd.sport - 5000)
 #             if rcv is not None and ICMP in rcv:
-#                 warning("Test %s answered by an ICMP", test)
+#                 warning('Test %s answered by an ICMP', test)
 #                 rcv = None
 #             res[test] = rcv
 #
@@ -161,9 +151,9 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 # def nmap_probes2sig(tests):
 #     tests = tests.copy()
 #     res = {}
-#     if "PU" in tests:
-#         res["PU"] = nmap_udppacket_sig(*tests["PU"])
-#         del tests["PU"]
+#     if 'PU' in tests:
+#         res['PU'] = nmap_udppacket_sig(*tests['PU'])
+#         del tests['PU']
 #     for k in tests:
 #         res[k] = nmap_tcppacket_sig(tests[k])
 #
@@ -172,10 +162,10 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 #
 # def nmap_search(sigs):
 #     guess = 0, []
-#     print ('----------')
-#     for osval, fprint in nmap_kdb.get_base():
+#     print('----------')
+#     for osval, fprintin nmap_kdb.get_base():
 #         score = 0.0
-#         print (osval)
+#         print(osval)
 #         for test, values in six.iteritems(fprint):
 #             if test in sigs:
 #                 score += nmap_match_one_sig(sigs[test], values)
@@ -184,27 +174,27 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 #             guess = score, [osval]
 #         elif score == guess[0]:
 #             guess[1].append(osval)
-#     print ("_____********______")
+#     print('_____********______')
 #     finger_ip_os.append(guess)
-#     print (guess)
+#     print(guess)
 #     return guess
 #
 #
 # @conf.commands.register
 # def nmap_fp(target, oport=80, cport=81):
-#     """nmap fingerprinting
+#     '''nmap fingerprinting
 # nmap_fp(target, [oport=80,] [cport=81,]) -> list of best guesses with accuracy
-# """
+# '''
 #     sigs = nmap_sig(target, oport, cport)
 #     return nmap_search(sigs)
 #
 #
 # @conf.commands.register
 # def nmap_sig2txt(sig):
-#     torder = ["TSeq", "T1", "T2", "T3", "T4", "T5", "T6", "T7", "PU"]
-#     korder = ["Class", "gcd", "SI", "IPID", "TS",
-#               "Resp", "DF", "W", "ACK", "Flags", "Ops",
-#               "TOS", "IPLEN", "RIPTL", "RID", "RIPCK", "UCK", "ULEN", "DAT"]
+#     torder = ['TSeq', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'PU']
+#     korder = ['Class', 'gcd', 'SI', 'IPID', 'TS',
+#               'Resp', 'DF', 'W', 'ACK', 'Flags', 'Ops',
+#               'TOS', 'IPLEN', 'RIPTL', 'RID', 'RIPCK', 'UCK', 'ULEN', 'DAT']
 #     txt = []
 #     for i in sig:
 #         if i not in torder:
@@ -213,24 +203,24 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 #         testsig = sig.get(test)
 #         if testsig is None:
 #             continue
-#         txt.append("%s(%s)" % (test, "%".join(
-#             "%s=%s" % (key, testsig[key]) for key in korder if key in testsig
+#         txt.append('%s(%s)' % (test, '%'.join(
+#             '%s=%s' % (key, testsig[key]) for key in korder if key in testsig
 #         )))
-#     return "\n".join(txt)
+#     return '\n'.join(txt)
 #
 #
 # def scan_ip_os(iplist):
 #
 #    for i in iplist:
 #        print(i)
-#        load_module("nmap")
+#        load_module('nmap')
 #        conf.nmap_os_base
 #        nmap_fp(i)
 
 # ip_list = ['10.132.2.158','10.132.2.3']
 # scan_ip_os(ip_list)
 
-'''
+"""
 操作系统的探测利用ttl进行判断
 
 win2000---->108 
@@ -242,12 +232,13 @@ solaris---->252
 IRIX------->240 
 AIX------->247 
 Linux----->64
-'''
+"""
+
 
 def find_os(ip):
     print("开始扫描操作系统类型")
 
-    r = sr1(IP(dst = ip) / ICMP(), iface='ens33', timeout = 1, verbose = 0)
+    r = sr1(IP(dst=ip) / ICMP(), iface="ens33", timeout=1, verbose=0)
 
     # b = IP(dst = ip) / ICMP()
     # s = s.split('\n')[8]
@@ -257,40 +248,40 @@ def find_os(ip):
 
     # import socket
 
-    if ip == '192.168.138.140': # bug
-        ip_for_os = '操作系统类型：' + 'Linux or Unix'
+    if ip == "192.168.138.140":  # bug
+        ip_for_os = "操作系统类型：" + "Linux or Unix"
     elif r == None:
-        ip_for_os = '操作系统类型：' + 'None'
+        ip_for_os = "操作系统类型：" + "None"
     else:
         ttl = r[IP].ttl
-
         if ttl <= 64:
-            ip_for_os = '操作系统类型：' + 'Linux or Unix'
-            print "Linux or Unix!"
+            ip_for_os = "操作系统类型：" + "Linux or Unix"
+            print("Linux or Unix!")
         elif ttl == 108:
-            ip_for_os = '操作系统类型：' + 'Window2000'
-            print "Window2000!"
+            ip_for_os = "操作系统类型：" + "Window2000"
+            print("Window2000!")
         elif ttl == 107:
-            ip_for_os = '操作系统类型：' + 'win NT'
-            print "win NT!"
+            ip_for_os = "操作系统类型：" + "win NT"
+            print("win NT!")
         elif ttl == 127:
-            ip_for_os = '操作系统类型：' + 'win9x'
-            print "win9x"
+            ip_for_os = "操作系统类型：" + "win9x"
+            print("win9x")
         elif ttl == 252:
-            ip_for_os = '操作系统类型：' + 'solaris'
-            print "solaris"
+            ip_for_os = "操作系统类型：" + "solaris"
+            print("solaris")
         elif ttl == 128:
-            ip_for_os = '操作系统类型：' + 'Windows XP'
-            print "Windows XP"
+            ip_for_os = "操作系统类型：" + "Windows XP"
+            print("Windows XP")
         else:
-            ip_for_os = '操作系统类型：' + 'Unix'
-            print "Unix!"
+            ip_for_os = "操作系统类型：" + "Unix"
+            print("Unix!")
 
     return ip_for_os
 
-'''
+
+"""
 iplist = ['192.168.92.129','192.168.92.130']
 for i in iplist:
-    print (i)
-    print (find_os(i))
-'''
+    print(i)
+    print(find_os(i))
+"""

@@ -1,14 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-
-
-
-
 #  利用端口的开放情况去判断杀毒软件的类型
 #  诺顿杀软：2969
 #  瑞星杀软：1688，1689
 
-def find_Antivirus_software(port_list):
+
+def find_antivirus_software(port_list):
     print("[*] 开始扫描杀毒软件类型")
 
     # syn = IP(dst=hostname) / TCP(dport=(int(lport), int(hport)), flags=2)
@@ -25,16 +22,11 @@ def find_Antivirus_software(port_list):
     #             print('端口号: ' + str(TCP_Fields['sport']) + ' is Open!!!')
 
     if 2696 in port_list:
-
-        Ip_for_Antivirus_software = '杀毒软件类型：' + '诺顿杀软'
-
+        ip_for_antivirus_software = "杀毒软件类型：" + "诺顿杀软"
     elif (1688 or 1689) in port_list:
-
-        Ip_for_Antivirus_software = '杀毒软件类型：' + '瑞星杀软'
-
+        ip_for_antivirus_software = "杀毒软件类型：" + "瑞星杀软"
     else:
+        ip_for_antivirus_software = "杀毒软件类型：" + "None"
 
-        Ip_for_Antivirus_software = '杀毒软件类型：' + 'None'
-
-    print(Ip_for_Antivirus_software)
-    return Ip_for_Antivirus_software
+    print(ip_for_antivirus_software)
+    return ip_for_antivirus_software

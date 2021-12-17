@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
 
-
 from socket import *
 import threading
 import time
 
 lock = threading.Lock()
 
-class ScanPort():
 
-    def __init__(self,startport,endport,ip):
-
+class ScanPort:
+    def __init__(self, startport, endport, ip):
         self.openNum = 0
         self.portlist = []
         self.port_alive_list = []
@@ -19,9 +17,7 @@ class ScanPort():
         self.startport = int(startport)
         self.endport = int(endport)
 
-    def portScanner(self,host, port):
-
-
+    def portScanner(self, host, port):
         # syn = IP(dst=hostname) / TCP(dport=(int(lport), int(hport)), flags=2)
         # result_raw = sr(syn, timeout=1, verbose=False)
         # # 取出收到结果的数据包，做成一个清单
@@ -47,34 +43,33 @@ class ScanPort():
             self.portlist.append(port)
             #   终端输出扫描端口对应的常用作用
             if port == 21:
-                print(str(port) + '-' + 'ftp')
-                print('继续扫描端口...')
+                print(str(port) + "-" + "ftp")
+                print("继续扫描端口...")
             elif port == 22:
-                print(str(port) + '-' + 'ssh')
-                print('继续扫描端口...')
+                print(str(port) + "-" + "ssh")
+                print("继续扫描端口...")
             elif port == 80:
-                print(str(port) + '-' + 'http ')
-                print('继续扫描端口...')
+                print(str(port) + "-" + "http ")
+                print("继续扫描端口...")
             elif port == 3306:
-                print(str(port) + '-' + 'mysql')
-                print('继续扫描端口...')
+                print(str(port) + "-" + "mysql")
+                print("继续扫描端口...")
             elif port == 27017:
-                print(str(port) + '-' + 'mongodb')
-                print('继续扫描端口...')
+                print(str(port) + "-" + "mongodb")
+                print("继续扫描端口...")
             else:
                 print(port)
-                print('继续扫描端口...')
+                print("继续扫描端口...")
         except:
             pass
-
 
     def scan_port(self):
         print("[*] 开始扫描端口")
         print(self.endport)
         print(self.startport)
         setdefaulttimeout(1)
-        #self.endport = int(self.endport) + 1
-        # if  int(self.endport) == 0:
+        # self.endport = int(self.endport) + 1
+        # if int(self.endport) == 0:
         #     ret = 0
         # else:
         #     self.endport = int(self.endport) + 1
@@ -92,7 +87,7 @@ class ScanPort():
                 time.sleep(0.001)
                 threads.append(t)
                 t.start()
-                t.join()  # 在子线程完成运行之前，这个子线程的父线程将一直被阻塞。
+                t.join() # 在子线程完成运行之前，这个子线程的父线程将一直被阻塞。
         # for n in range(1,100):
         #     threads = []
         #     for p in range((n - 1) * int(ret/100)+self.startport, n * int(ret/100)+self.startport):
@@ -104,19 +99,18 @@ class ScanPort():
         #         pass
         #     t.join()  # 在子线程完成运行之前，这个子线程的父线程将一直被阻塞。
         self.portlist.sort()
-        #for i in portlist:
+        # for i in portlist:
         #      print(i)
         self.port_alive_list.append(self.portlist)
-        print (self.port_alive_list)
-        print('[*] The scan is complete!')
-        print('[*] A total of %d open port ' % (self.openNum))
+        print(self.port_alive_list)
+        print("[*] The scan is complete!")
+        print("[*] A total of %d open port " % (self.openNum))
         return self.portlist
-
 
 
 # iplist = ['10.132.2.240','10.132.2.158','10.132.2.14']
 # for i in iplist:
-#     print (i)
+#     print(i)
 #     scaner = ScanPort(1,10000,i)
 #     scaner.scan_port()
-#     print (scaner.portlist)
+#     print(scaner.portlist)
